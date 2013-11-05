@@ -14,7 +14,7 @@ $app->register(new FormServiceProvider());
 $app->register(new Silex\Provider\DoctrineServiceProvider(), array(
 		'db.options' => array(
 			'driver' => 'pdo_mysql',
-			'host' => 'localhsost',
+			'host' => 'localhost',
 			'dbname' => 'mobile_app',
 			'user' => 'root',
 			'password' => '',
@@ -31,7 +31,7 @@ $app->match('/form', function (Request $request) use ($app) {
     );
 	$users = $app['db']->featchAll('SELECT name, surname, id FROM users');
 	$vk_users = [];
-	foreach ($users as $kay =>  ) {
+	foreach ($users as $user) {
 		$vk_users['id'] = $user['name'].' '.$user['surname'];
 	}
     $form = $app['form.factory']->createBuilder('form', $data)
@@ -90,6 +90,19 @@ $app->get('/dashboard/new_debt', function() use($app){
 	
 	$app['db']->insert('friends', array('name'=> $name, 'surname' => $surname, 'vk_id' => $vk_id));
 	
+});
+
+$app->get('/notifycheck', function() use($app){
+
+    $sql = "SELECT * FROM debts WHERE status = 1";
+    $depts = $app['db'] -> fetchAll ($sql);
+    foreach ($depts as $dept) {
+        if (strtotime($dept['last_notify']) < time()) {
+
+        }
+    }
+
+
 });
 
 
