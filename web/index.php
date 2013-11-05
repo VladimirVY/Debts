@@ -65,6 +65,26 @@ $app->get('/hello/{name}', function ($name) use ($app) {
     ));
 });
 
+$app->register(new Silex\Provider\TwigServiceProvider(), 
+                array('twig.path' => __DIR__.'/../views',
+));
+
+$app->register(new Silex\Provider\UrlGeneratorServiceProvider());
+
+
+
+$app->get('/hello', function() {
+    return 'Hello!';
+})
+->bind('homepage');
+
+
+
+$app->get('/', function() use ($app) {
+    return $app['twig']->render('main.html',array());
+}); 
+
+
 $app->get('/dashboard/new_debt', function() use($app){ 
     
 	
